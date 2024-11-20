@@ -22,7 +22,8 @@ from config import (
     API_ID,
     API_HASH,
     BOT_TOKEN,
-    SESSION_STRING
+    SESSION_STRING,
+    ALLOWED_USER_IDS
 )
 
 # Initialize the bot client
@@ -61,6 +62,9 @@ async def help_command(bot, message: Message):
 
 @bot.on_message(filters.command("dl") & filters.private)
 async def download_media(bot, message: Message):
+    if str(message.from_user.id) not in ALLOWED_USER_IDS:
+        await message.reply("sorry, you do not have the necessary permissions to use this bot. Please contact the owner.")
+        return
     if len(message.command) < 2:
         await message.reply("Provide a post URL after the /dl command.")
         return
